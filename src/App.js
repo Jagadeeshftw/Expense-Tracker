@@ -1,6 +1,6 @@
 import React from "react";
 import "./index.css";
-import Expense from "./components/Expenses/Expense";
+import ClickToAddExpense from "./components/Expenses/ClickToAddExpense";
 import ExpenseCard from "./components/Expenses/ExpenseCard";
 import NewExpenses from "./components/NewExpenses/NewExpenses";
 import { useState } from "react";
@@ -31,19 +31,26 @@ const dummyExpenses = [
     date: new Date(2021, 5, 12),
   },
 ];
+
 function App() {
   const [expenses, setExpenses] = useState(dummyExpenses);
-  const addExpenseData = (expense) => {
-    setExpenses((prevExpenses) => {
-      return [expense, ...prevExpenses];
-    });
-  };
-  return (
-    // main container
 
+  const addExpenseData = (expense) => {
+    setExpenses((prevExpenses) => [expense, ...prevExpenses]);
+  };
+
+  const newExpenseContentHandler = () => {
+    console.log("Button clicked!");
+    setShowExpenseCard(<NewExpenses onSave={addExpenseData} />);
+  };
+
+  const [showExpenseCard, setShowExpenseCard] = useState(
+    <ClickToAddExpense click={newExpenseContentHandler} />
+  );
+
+  return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-gray-500">
-      {/* <h1 className="text-6xl text-white mx-2 p-3">Let's get started</h1> */}
-      <NewExpenses onSave={addExpenseData}></NewExpenses>
+      {showExpenseCard}
       <div className="md:py-10 w-4/6">
         <ExpenseCard items={expenses}></ExpenseCard>
       </div>
